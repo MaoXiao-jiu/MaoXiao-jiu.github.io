@@ -1,0 +1,203 @@
+/* ============================================================
+   base.css —— 全站共用样式
+   所有页面都要引入本文件
+
+   目录:
+     1. 变量              2. 全局重置
+     3. 页面背景          4. 顶部导航
+     5. 通用组件:卡片     6. 手机提示条
+     7. 分隔线 hr         8. 导航下划线动画
+     9. 响应式
+   ============================================================ */
+
+
+/* ============================================================
+   1. 变量 —— 全站颜色只在这里定义,改一处即可换配色
+   ============================================================ */
+:root {
+    --main_color: rgba(74, 201, 201, 0.539);   /* 主色:导航栏 / 卡片 / 分隔线 */
+    --main_font_color: #fff;                   /* 主文字色:白色 */
+}
+
+
+/* ============================================================
+   2. 全局重置
+   ============================================================ */
+* {
+    /* width 包含 padding 和 border,避免"加了 padding 元素就变宽" */
+    box-sizing: border-box;
+}
+
+
+/* ============================================================
+   3. 页面背景
+   ============================================================ */
+body {
+    /* 注意:本文件在 css/ 子目录里,图片要先 ../ 回到上一级,再进 images/ */
+    background-image: url("../images/background.jpg");
+    background-size: cover;                    /* 铺满视口(可能裁掉边缘) */
+    background-position: center;               /* 居中显示 */
+    background-attachment: fixed;              /* 滚动时背景固定不动 */
+    margin: 0;                                 /* 去掉浏览器默认的 8px 外边距 */
+    padding: 0;
+    font-family: "Microsoft YaHei", "PingFang SC", sans-serif;  /* 中文字体栈 + 兜底 */
+}
+
+
+/* ============================================================
+   4. 顶部导航
+   ============================================================ */
+header {
+    display: flex;                    /* 让 logo 和 nav 左右排列 */
+    align-items: center;              /* 交叉轴居中(垂直中线对齐) */
+    justify-content: space-between;   /* 两端对齐:logo 靠左,导航靠右 */
+    padding: 12px 24px;
+    background-color: var(--main_color);
+}
+
+/* --- 左侧:图标 + 名字 --- */
+.logo {
+    display: flex;                  /* 图标和文字横排 */
+    align-items: center;
+    gap: 16px;                      /* 图标与文字的间距 */
+    color: var(--main_font_color);
+    text-decoration: none;          /* 去掉链接默认下划线 */
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.logo img {
+    height: 32px;      /* 固定高度,避免按原图尺寸撑高导航 */
+    width: auto;       /* 按比例缩放,不变形 */
+    display: block;    /* 去掉图片底部的几像素空白 */
+}
+
+/* --- 右侧:导航列表 --- */
+nav ul {
+    display: flex;        /* 让 li 横排(li 默认块级,会竖着堆) */
+    align-items: center;
+    gap: 1.75rem;         /* 导航项之间的间距 */
+    margin: 0;            /* 去掉 ul 默认外边距 */
+    padding: 0;           /* 去掉 ul 默认左缩进(约 40px) */
+    list-style: none;     /* 去掉每项前面的圆点 */
+}
+
+nav a {
+    display: block;                /* 让 padding 真正撑开点击区域 */
+    padding: 8px 4px;
+    color: var(--main_font_color);
+    text-decoration: none;
+    position: relative;            /* 关键:给 ::after 下划线建立定位参照 */
+    transition: opacity 0.2s;
+}
+
+nav a:hover {
+    opacity: 0.7;                  /* 悬浮变淡,给出可点击的反馈 */
+}
+
+
+/* ============================================================
+   5. 通用组件:卡片 —— 多个页面都可能用到
+   ============================================================ */
+.card {
+    text-align: center;                  /* 文字水平居中 */
+    background-color: var(--main_color);
+    border-radius: 20px;
+    color: #ffffff;
+    max-width: 800px;                    /* 限制最大宽度,避免宽屏拉太长 */
+    margin: 1.2rem auto;                 /* 上下留白,左右 auto = 水平居中 */
+    padding: 1.2rem 2rem;                /* 用内边距撑开高度,代替写死 height */
+}
+
+
+/* ============================================================
+   6. 手机提示条 —— "建议用电脑访问"
+   默认隐藏,只有在窄屏(≤768px)时才显示,规则见文件末尾的响应式小节
+   ============================================================ */
+.phone-card {
+    display: none;                       /* 桌面端:不显示 */
+}
+
+
+/* ============================================================
+   7. 分隔线 hr
+   ============================================================ */
+hr {
+    border: none;                          /* 去掉默认的 3D 凹陷边框 */
+    height: 3px;
+    background-color: var(--main_color);
+    width: 100%;                           /* 先占满可用宽度 */
+    max-width: 800px;                      /* 但不超过卡片宽度,保持对齐 */
+    margin: 1.1rem auto;                   /* 上下留白 + 水平居中 */
+}
+
+
+/* ============================================================
+   8. 导航悬停:下划线从左侧展开
+   ============================================================ */
+nav a::after {
+    content: "";                           /* 伪元素必须写 content 才会生成 */
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;                              /* 初始宽度 0:不可见 */
+    height: 3px;
+    background-color: rgba(49, 137, 137, 0.539);
+    transition: width 0.35s ease;          /* 过渡必须写在基础状态 */
+}
+
+nav a:hover::after {
+    width: 100%;                           /* 悬浮时长满,形成"滑出"效果 */
+}
+
+
+/* ============================================================
+   徽章 —— 小标签,用于 "beta"、"New" 这类状态标记
+   ============================================================ */
+.badge {
+    display: inline-block;
+    padding: 0.15rem 0.55rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    line-height: 1.5;
+    border-radius: 999px;                      /* 胶囊形 */
+    background-color: rgba(255, 255, 255, 0.18);
+    color: #fff;
+    vertical-align: middle;                    /* 和旁边文字对齐 */
+    white-space: nowrap;
+}
+
+
+/* ============================================================
+   9. 响应式:屏幕宽度 ≤ 768px 时生效
+      必须放在文件末尾 —— 同优先级时后写的规则才生效
+   ============================================================ */
+   @media (max-width: 768px) {
+
+    /* 导航改为上下两行:第一行 logo,第二行导航 */
+    header {
+        flex-direction: column;
+        gap: 8px;
+        padding: 10px 16px;
+    }
+
+    /* 导航项允许换行,并整体居中 */
+    nav ul {
+        gap: 1rem;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    /* 关键:禁止词内断行,解决"首/页"被拆成两行的问题 */
+    nav a {
+        white-space: nowrap;
+        font-size: 0.9rem;
+        padding: 6px 4px;
+    }
+
+    /* 手机端:显示"建议用电脑访问"提示条
+       (基础规则在"6. 手机提示条"里写了 display: none) */
+    .phone-card {
+        display: block;
+    }
+}
