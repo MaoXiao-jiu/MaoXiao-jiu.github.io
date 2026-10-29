@@ -1,0 +1,70 @@
+/* ============================================================
+   english.css —— 英语页专用样式
+   只在本页面引入（其他页面不需要）
+   依赖：必须在 base.css 之后引入
+   ============================================================ */
+
+/* ---------- 1. 视频卡片标题 ---------- */
+.video-title {
+    text-align: left;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin: 0 0 14px;
+}
+
+
+/* ---------- 2. 视频容器：固定 16:9，自适应宽度 ----------
+   用 padding-top 百分比撑高度，是老浏览器也稳定的写法
+   （aspect-ratio 更简洁，但对旧版 Safari 支持稍差）
+   ------------------------------------------------------ */
+.video-wrap {
+    position: relative;
+    width: 100%;
+    padding-top: 56.25%;          /* 16 / 9 = 0.5625 */
+    border-radius: 12px;
+    overflow: hidden;
+    background: #000;
+}
+
+.video-wrap iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+
+/* ---------- 3. 退路提示（播放失败时引导去 B 站） ---------- */
+.video-note {
+    text-align: left;
+    font-size: 0.82rem;
+    opacity: 0.75;
+    margin: 10px 0 0;
+}
+
+.video-note a {
+    color: inherit;
+    text-decoration: underline;
+}
+
+
+/* ---------- 4. 题目列表（可选，后面加题时用） ---------- */
+.question-list {
+    text-align: left;
+    padding-left: 1.4rem;
+    margin: 16px 0 0;
+    line-height: 2;
+}
+
+.question-list li {
+    font-size: 0.95rem;
+}
+
+
+/* ---------- 5. 手机上收紧一点留白 ---------- */
+@media (max-width: 768px) {
+    .video-title { font-size: 1rem; }
+    .question-list li { font-size: 0.9rem; }
+}
