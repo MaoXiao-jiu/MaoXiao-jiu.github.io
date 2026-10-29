@@ -76,7 +76,7 @@ header {
 nav ul {
     display: flex;        /* 让 li 横排(li 默认块级,会竖着堆) */
     align-items: center;
-    gap: 1.75rem;         /* 导航项之间的间距 */
+    gap: 1.25rem;         /* 导航项之间的间距 */
     margin: 0;            /* 去掉 ul 默认外边距 */
     padding: 0;           /* 去掉 ul 默认左缩进(约 40px) */
     list-style: none;     /* 去掉每项前面的圆点 */
