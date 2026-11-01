@@ -87,6 +87,7 @@ nav ul {
     margin: 0;            /* 去掉 ul 默认外边距 */
     padding: 0;           /* 去掉 ul 默认左缩进(约 40px) */
     list-style: none;     /* 去掉每项前面的圆点 */
+    position: relative;
 }
 
 nav a {
@@ -97,11 +98,20 @@ nav a {
     position: relative;            /* 关键:给 ::after 下划线建立定位参照 */
     transition: opacity 0.2s;
 }
-
+.special_underline{
+     display: block;                /* 让 padding 真正撑开点击区域 */
+    padding: 8px 4px;
+    color: var(--main_font_color);
+    text-decoration: none;
+    position: relative;            /* 关键:给 ::after 下划线建立定位参照 */
+    transition: opacity 0.2s;
+}
 nav a:hover {
     opacity: 0.7;                  /* 悬浮变淡,给出可点击的反馈 */
 }
-
+.special_underline:hover{
+    opacity: 0.7; 
+}
 
 /* ============================================================
    5. 通用组件:卡片 —— 多个页面都可能用到
@@ -157,6 +167,19 @@ nav a:hover::after {
     width: 100%;                           /* 悬浮时长满,形成"滑出"效果 */
 }
 
+.special_underline::after{
+    content: "";                           /* 伪元素必须写 content 才会生成 */
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;                              /* 初始宽度 0:不可见 */
+    height: 3px;
+    background-color: rgba(49, 137, 137, 0.539);
+    transition: width 0.35s ease;          /* 过渡必须写在基础状态 */
+}
+.special_underline:hover::after{
+    width: 100%;  
+}
 
 /* ============================================================
    徽章 —— 小标签,用于 "beta"、"New" 这类状态标记
@@ -173,8 +196,55 @@ nav a:hover::after {
     vertical-align: middle;                    /* 和旁边文字对齐 */
     white-space: nowrap;
 }
-.Copyright{
-    
+/* ============================================================
+   下拉菜单(dropdown)
+   结构:li.has-dropdown > a + .Accordion_card
+   原理:li 建立定位参照,面板绝对定位贴在下方,默认隐藏,悬停显示
+   ============================================================ */
+
+/* 有下拉的菜单项 —— 必须有 relative,否则面板会相对页面定位 */
+.has-dropdown {
+    position: relative;
+}
+
+.Accordion_card {
+    position: absolute;
+    top: 100%;                    /* 贴在父元素下边缘,不留缝(留缝会导致 hover 断开) */
+    left: 0;
+    z-index: 999;                 /* 盖在页面内容之上 */
+    border: 0.2rem solid var(--main_color);
+    min-width: 150px;             /* 不然宽度会缩成文字那么窄 */
+    padding: 8px;
+    background-color: var(--main_color);
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+
+    /* 默认隐藏:用 opacity + visibility,不用 display(display 无法过渡) */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-6px);
+    transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s;
+}
+
+/* 悬停 / 键盘聚焦时显示 */
+.has-dropdown:hover .Accordion_card,
+.has-dropdown:focus-within .Accordion_card {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* 面板里的链接 */
+.Accordion_card a {
+    display: block;
+    padding: 8px 12px;
+    border-radius: 6px;
+    color: var(--main_font_color);
+    white-space: nowrap;          /* 不换行,保持一行一个条目 */
+}
+
+.Accordion_card a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 
