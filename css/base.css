@@ -11,6 +11,12 @@
    ============================================================ */
 
 
+/* 思源黑体(Noto Sans SC)—— 通过 Google Fonts 中国镜像加载
+   授权:SIL OFL,免费商用(微软雅黑是商业字体,不能这样用)
+   原理:按 unicode-range 切成几百个小文件,页面用到哪些字才下哪些 */
+@import url("https://fonts.googleapis.cn/css2?family=Noto+Sans+SC:wght@400;600;700&display=swap");
+
+
 /* ============================================================
    1. 变量 —— 全站颜色只在这里定义,改一处即可换配色
    ============================================================ */
@@ -40,7 +46,8 @@ body {
     background-attachment: fixed;              /* 滚动时背景固定不动 */
     margin: 0;                                 /* 去掉浏览器默认的 8px 外边距 */
     padding: 0;
-    font-family: "Microsoft YaHei", "PingFang SC", sans-serif;  /* 中文字体栈 + 兜底 */
+    /* 默认用思源黑体;如果没加载出来,依次退回系统字体 */
+    font-family: "Noto Sans SC", "Microsoft YaHei", "PingFang SC", sans-serif;
 }
 
 
@@ -165,6 +172,9 @@ nav a:hover::after {
     color: #fff;
     vertical-align: middle;                    /* 和旁边文字对齐 */
     white-space: nowrap;
+}
+.Copyright{
+    
 }
 
 
