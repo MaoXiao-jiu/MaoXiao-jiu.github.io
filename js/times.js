@@ -38,3 +38,17 @@ function renderDate() {
     return `It's ${outputmonths} ${outputdays}, ${outputweek}`;
 }
 console.log(renderDate());
+
+const question = document.querySelector('h1 em');
+const originalText = question.textContent;
+let showingDate = false;
+
+question.addEventListener('click', () => {
+    if (showingDate) {
+        question.textContent = originalText;
+        showingDate = false;
+    } else {
+        question.textContent = renderDate();
+        showingDate = true;
+    }
+});

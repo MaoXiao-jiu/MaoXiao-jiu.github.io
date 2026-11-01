@@ -43,3 +43,11 @@ h1 {
     margin-left: 1.5rem;
     opacity: 0.4;               /* 竖线比文字淡,起分隔作用但不抢眼 */
 }
+h1 em { 
+    cursor: pointer;
+    transition: 0.18s;
+    opacity: 1;
+}
+h1 em:hover{
+    opacity: 0.7;
+}

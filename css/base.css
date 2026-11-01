@@ -98,19 +98,27 @@ nav a {
     position: relative;            /* 关键:给 ::after 下划线建立定位参照 */
     transition: opacity 0.2s;
 }
-.special_underline{
-     display: block;                /* 让 padding 真正撑开点击区域 */
-    padding: 8px 4px;
-    color: var(--main_font_color);
+/* ============================================================
+   导航项外观(非链接版)
+   为什么需要它:上面的 nav a 只匹配 <a> 标签,而下拉菜单的触发项
+   "学科"用的是 <span>,拿不到 nav a 的样式,所以把同样的外观复制一份。
+   改动时注意:这里的数值要和 nav a 保持一致,否则两个导航项会不等高。
+   ============================================================ */
+.special_underline {
+    display: block;                /* 让它表现得像块级:padding 才能真正撑开区域 */
+    padding: 8px 4px;              /* 和 nav a 一致,保证高度对齐 */
+    color: var(--main_font_color); /* 和 nav a 同色 */
     text-decoration: none;
     position: relative;            /* 关键:给 ::after 下划线建立定位参照 */
-    transition: opacity 0.2s;
+    transition: opacity 0.2s;      /* 悬浮时透明度平滑变化 */
 }
+
 nav a:hover {
     opacity: 0.7;                  /* 悬浮变淡,给出可点击的反馈 */
 }
-.special_underline:hover{
-    opacity: 0.7; 
+
+.special_underline:hover {
+    opacity: 0.7;                  /* 和 nav a:hover 保持一致 */
 }
 
 /* ============================================================
@@ -167,7 +175,9 @@ nav a:hover::after {
     width: 100%;                           /* 悬浮时长满,形成"滑出"效果 */
 }
 
-.special_underline::after{
+/* 同样的下划线动画,复制给 .special_underline(<span> 版导航项)
+   因为 ::after 的规则是按选择器匹配的,nav a::after 覆盖不到 <span> */
+.special_underline::after {
     content: "";                           /* 伪元素必须写 content 才会生成 */
     position: absolute;
     left: 0;
@@ -177,8 +187,9 @@ nav a:hover::after {
     background-color: rgba(49, 137, 137, 0.539);
     transition: width 0.35s ease;          /* 过渡必须写在基础状态 */
 }
-.special_underline:hover::after{
-    width: 100%;  
+
+.special_underline:hover::after {
+    width: 100%;                           /* 悬浮时长满,形成"滑出"效果 */
 }
 
 /* ============================================================
@@ -208,21 +219,25 @@ nav a:hover::after {
 }
 
 .Accordion_card {
-    position: absolute;
-    top: 100%;                    /* 贴在父元素下边缘,不留缝(留缝会导致 hover 断开) */
-    left: 0;
-    z-index: 999;                 /* 盖在页面内容之上 */
-    border: 0.2rem solid var(--main_color);
-    min-width: 150px;             /* 不然宽度会缩成文字那么窄 */
-    padding: 8px;
-    background-color: var(--main_color);
-    border-radius: 10px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    position: absolute;           /* 脱离文档流:不占位置,浮在页面内容之上 */
+    top: 100%;                    /* 100% = 父元素自身的高度,所以正好贴在它下边缘。
+                                     不能留缝:留缝的话鼠标移出父元素的一瞬间 hover 就断了,
+                                     "还没够到面板就收起来" */
+    left: 0;                      /* 左边缘和父元素对齐 */
+    z-index: 999;                 /* 盖在页面内容之上,数值只要比同级元素大就行 */
 
-    /* 默认隐藏:用 opacity + visibility,不用 display(display 无法过渡) */
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-6px);
+    border: 0.2rem solid var(--main_color);   /* 边框颜色和全站主色统一 */
+    min-width: 150px;             /* 不然宽度会缩成文字那么窄,看起来像个标签 */
+    padding: 8px;                 /* 面板内边距;条目自己还有内边距,所以这里小一点 */
+    background-color: var(--main_color);      /* 半透明主色,能隐约透出背后的背景图 */
+    border-radius: 10px;          /* 圆角,和卡片保持一致的圆润感 */
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);  /* 阴影:让它看起来真的"浮起来" */
+
+    /* 默认隐藏。用 opacity + visibility 组合,而不是 display: none ——
+       因为 display 无法参与过渡动画,会"啪"地瞬间出现/消失 */
+    opacity: 0;                   /* 完全透明 */
+    visibility: hidden;           /* 同时不可见,并且不响应鼠标 */
+    transform: translateY(-6px);  /* 先上移 6px,展开时向下滑出,比纯淡入更有方向感 */
     transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s;
 }
 
