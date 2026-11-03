@@ -5,7 +5,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>食堂食谱-MaoXiao_jiu</title>
     <link rel="stylesheet" href="css/base.css">
-    <link rel="stylesheet" href="css/index.css">
+  
+    <style>
+        .copyright{
+            padding: 0.8rem 1rem 1rem;   /* 用内边距撑高度,内容多少都自适应 */
+            border-top: 0.15rem solid var(--main_font_color);
+            background-color: var(--main_color);
+            width: 100%;
+            text-align: center;
+            color: var(--main_font_color);
+            font-size: 0.78rem;
+            line-height: 1.2;    
+        }
+        .copyright img {
+            display: block;          /* 关键:块级元素不参与文字基线排版 */
+            height: 32px;
+            width: auto;
+            margin: 10px auto 0;          /* 变成块级后，text-align 管不到它了，要用 auto 居中 */
+        }
+
+        .copyright p {
+            margin: 0.4rem 0 0;      /* 只保留上边距，约 6.4px */
+        }
+
+        /* 免责声明:三行里最重要的一条,稍微加粗 */
+        .copyright .disclaimer {
+            font-weight: 600;
+        }
+
+        /* 版权信息:最次要,稍小稍淡 */
+        .copyright .meta {
+            color: rgba(255, 255, 255, 0.65);
+            font-size: 0.65rem;
+        }
+    </style>
 </head>
 <body>
       <header>
@@ -93,6 +126,11 @@
         <p style="text-align: left;">午餐:滚木</p>
         <p style="text-align: left;">晚餐:滚木</p>
     </div>
-    
+    <footer class="copyright">
+        <img src="images/MaoXiao_jiu.png" alt="MaoXiao_jiu">
+        <p class="disclaimer">该背景仅为Minecraft的游戏截图,与Mojang和Microsoft无关联</p>
+        <p>网站中的部分内容来自其他平台,真实性可能存疑,请仔细甄别</p>
+        <p class="meta">© 2026 MaoXiao_jiu</p>
+    </footer>
 </body>
 </html>
