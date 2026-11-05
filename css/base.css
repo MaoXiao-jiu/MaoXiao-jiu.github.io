@@ -7,7 +7,7 @@
      3. 页面背景          4. 顶部导航
      5. 通用组件:卡片     6. 手机提示条
      7. 分隔线 hr         8. 导航下划线动画
-     9. 响应式
+     9. 页脚              10. 响应式
    ============================================================ */
 
 
@@ -264,7 +264,46 @@ nav a:hover::after {
 
 
 /* ============================================================
-   9. 响应式:屏幕宽度 ≤ 768px 时生效
+   9. 页脚 —— 全站共用
+   
+   ============================================================ */
+.copyright {
+    padding: 0.8rem 1rem 1rem;                 /* 用内边距撑高度,内容多少都自适应 */
+    border-top: 0.15rem solid var(--main_font_color);
+    background-color: var(--main_color);
+    width: 100%;
+    text-align: center;
+    color: var(--main_font_color);
+    font-size: 0.78rem;
+    line-height: 1.2;
+}
+
+/* 头像:必须是块级,否则会坐在文字基线上,凭空多出约 6px 空隙 */
+.copyright img {
+    display: block;
+    height: 32px;
+    width: auto;
+    margin: 10px auto 0;                       /* 块级之后 text-align 管不到,要靠 auto 居中 */
+}
+
+.copyright p {
+    margin: 0.4rem 0 0;                        /* 只保留上边距,约 6.4px */
+}
+
+/* 免责声明:页脚里最重要的一条,稍微加粗 */
+.copyright .disclaimer {
+    font-weight: 600;
+}
+
+/* 版权信息:最次要,稍小稍淡 */
+.copyright .meta {
+    color: rgba(255, 255, 255, 0.65);
+    font-size: 0.65rem;
+}
+
+.nav-menu { display: none; }  
+/* ============================================================
+   10. 响应式:屏幕宽度 ≤ 768px 时生效
       必须放在文件末尾 —— 同优先级时后写的规则才生效
    ============================================================ */
    @media (max-width: 768px) {
