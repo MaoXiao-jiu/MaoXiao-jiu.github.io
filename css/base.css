@@ -48,13 +48,23 @@ body {
     padding: 0;
     /* 默认用思源黑体;如果没加载出来,依次退回系统字体 */
     font-family: "Noto Sans SC", "Microsoft YaHei", "PingFang SC", sans-serif;
+
+    /* 让页脚能贴到页面底部:body 撑满一屏 + 竖向排列,
+       页脚再用 margin-top: auto 吃掉剩余空间 */
+    min-height: 100vh;
+    min-height: 100dvh;              /* 新浏览器用动态视口高度,避开手机地址栏的坑 */
+    display: flex;
+    flex-direction: column;
 }
 
 
 /* ============================================================
    4. 顶部导航
    ============================================================ */
-header {
+    .phone-main{
+        display: none;
+    }
+   header {
     display: flex;                    /* 让 logo 和 nav 左右排列 */
     align-items: center;              /* 交叉轴居中(垂直中线对齐) */
     justify-content: space-between;   /* 两端对齐:logo 靠左,导航靠右 */
@@ -129,6 +139,7 @@ nav a:hover {
     background-color: var(--main_color);
     border-radius: 20px;
     color: #ffffff;
+    width: 100%;                         /* flex 里必须显式写,否则会收缩成内容宽度 */
     max-width: 800px;                    /* 限制最大宽度,避免宽屏拉太长 */
     margin: 1.2rem auto;                 /* 上下留白,左右 auto = 水平居中 */
     padding: 1.2rem 2rem;                /* 用内边距撑开高度,代替写死 height */
@@ -276,6 +287,7 @@ nav a:hover::after {
     color: var(--main_font_color);
     font-size: 0.78rem;
     line-height: 1.2;
+    margin-top: auto;                          /* 页脚贴底:把上方剩余空间全部吃掉 */
 }
 
 /* 头像:必须是块级,否则会坐在文字基线上,凭空多出约 6px 空隙 */
@@ -300,8 +312,110 @@ nav a:hover::after {
     color: rgba(255, 255, 255, 0.65);
     font-size: 0.65rem;
 }
+/* ============================================================
+   手机端下拉菜单
+   结构:div.phone-dropdown-wrap > span.phone-dropdown + div.phone-accordion
+   关键:position: relative 必须放在外层 div 上 ——
+        面板是 span 的"兄弟",不是"子元素",放在 span 上定位不到它
+   ============================================================ */
+.phone-dropdown-wrap {
+    position: relative;           /* 定位参照:面板要相对它定位 */
+}
 
-.nav-menu { display: none; }  
+.phone-accordion {
+    position: absolute;
+    top: 100%;                    /* 贴在父元素下边缘,不留缝 */
+    right: 0;                     /* 它在屏幕右侧,用 right:0 对齐;用 left:0 会跑到屏幕外 */
+    z-index: 999;
+
+    border: 0.2rem solid var(--main_color);
+    min-width: 150px;
+    padding: 8px;
+    background-color: var(--main_color);
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+
+    /* 默认隐藏:用 opacity + visibility,不用 display(display 无法过渡) */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-6px);
+    transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s;
+}
+
+/* 悬停 / 键盘聚焦时显示 —— 少了这段,面板会永远是透明的 */
+.phone-dropdown-wrap:hover .phone-accordion,
+.phone-dropdown-wrap:focus-within .phone-accordion {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* 面板里的链接 */
+.phone-accordion a {
+    display: block;
+    padding: 8px 12px;
+    border-radius: 6px;
+    color: var(--main_font_color);
+    white-space: nowrap;
+    text-decoration: none;        /* 去掉链接默认下划线 */
+}
+
+.phone-accordion a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+
+/* ============================================================
+   面板里的二级菜单(嵌套导航)
+   思路:不用"往右飞出",而是"往下展开 + 缩进"
+   理由:手机屏幕窄,往右飞会超出屏幕;往下展开更符合直觉
+   ============================================================ */
+.sub-trigger {
+    display: block;
+    padding: 8px 12px;
+    border-radius: 6px;
+    color: var(--main_font_color);
+    cursor: pointer;              /* 提示这里可点 */
+    white-space: nowrap;
+}
+
+.sub-trigger:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* 子菜单默认收起 */
+.sub-menu {
+    display: none;
+    margin-left: 12px;
+    padding-left: 14px;                                 /* 缩进 = 视觉上的层级 */
+    border-left: 2px solid rgba(255, 255, 255, 0.25);    /* 左侧竖线,强化层级感 */
+}
+
+/* 悬停 / 键盘聚焦时展开 */
+.sub-wrap:hover > .sub-menu,
+.sub-wrap:focus-within > .sub-menu {
+    display: block;
+}
+
+.sub-menu a {
+    display: block;
+    padding: 6px 12px;
+    border-radius: 6px;
+    color: var(--main_font_color);
+    text-decoration: none;
+    opacity: 0.85;
+    white-space: nowrap;
+}
+
+.sub-menu a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    opacity: 1;
+}
+
+
+
+
+
 /* ============================================================
    10. 响应式:屏幕宽度 ≤ 768px 时生效
       必须放在文件末尾 —— 同优先级时后写的规则才生效
@@ -309,7 +423,12 @@ nav a:hover::after {
    @media (max-width: 768px) {
 
     /* 导航改为上下两行:第一行 logo,第二行导航 */
-    header {
+    .main
+        {
+                display: none;
+        }    
+    
+        header {
         flex-direction: column;
         gap: 8px;
         padding: 10px 16px;
@@ -333,5 +452,13 @@ nav a:hover::after {
        (基础规则在"6. 手机提示条"里写了 display: none) */
     .phone-card {
         display: block;
+    }
+    .phone-main{
+        display: flex;
+        align-items: center;              /* 垂直居中对齐 */
+        justify-content: space-between;   /* 两端分开:头像靠左,更多靠右 */
+        flex-direction: row; 
+        color: var(--main_font_color);
+        
     }
 }
