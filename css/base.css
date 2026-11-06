@@ -413,9 +413,63 @@ nav a:hover::after {
 }
 
 
+/* ============================================================
+   更新公告(动态列表)
+   结构:.card.updates > h2 + ul.update-list > li.update-item
+        > time.update-date + div.update-body
 
+   这个结构就是以后 Django 模板 {% for %} 循环体的样子,
+   静态阶段手写的内容和模板渲染结果保持一致,接后端时只换内容
+   ============================================================ */
+.updates {
+    text-align: left;               /* 卡片默认居中,这里要左对齐 */
+}
 
+.update-list {
+    list-style: none;               /* 去掉 ul 默认的圆点 */
+    margin: 0;
+    padding: 0;                     /* 去掉 ul 默认左缩进(约 40px) */
+}
 
+.update-item {
+    display: flex;                  /* 日期在左,内容在右 */
+    gap: 1rem;                      /* 日期和内容之间的距离 */
+    padding: 0.8rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.18);   /* 条目分隔线 */
+}
+
+/* 最后一条不要分隔线,否则会多出一条多余线 */
+.update-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.update-date {
+    flex: 0 0 4.2rem;               /* 不放大、不缩小,固定宽度 —— 日期对齐靠它 */
+    font-size: 0.8rem;
+    line-height: 1.6;
+    opacity: 0.7;                   /* 次要信息,淡一点 */
+    white-space: nowrap;
+}
+
+.update-body {
+    flex: 1;                        /* 占满剩余宽度 */
+    min-width: 0;                   /* 关键:不加的话长文本会把 flex 撑破 */
+}
+
+.update-body p {
+    margin: 0;
+    line-height: 1.6;               /* 行距就是这里,别再写 0.9rem */
+}
+.update-body img{
+    max-width: 100%;
+    height: auto; 
+    margin-top: 10px;
+}
+.have-img-update{
+    border-bottom: 2px solid rgba(255, 255, 255, 0.18);  
+    
+}
 /* ============================================================
    10. 响应式:屏幕宽度 ≤ 768px 时生效
       必须放在文件末尾 —— 同优先级时后写的规则才生效
