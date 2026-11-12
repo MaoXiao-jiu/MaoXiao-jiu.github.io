@@ -1,0 +1,55 @@
+.introduction{
+    text-align: left;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;      /* 文字块顶端和头像顶端对齐 */
+    gap: 3rem;
+}
+.introduction img{
+    width: 128px;
+    height: 128px;
+    border: 1.5px solid #FFF;
+    border-radius: 50%;
+    object-fit: cover;            /* 按短边裁切填满,换竖图也不会变椭圆 */
+}
+
+
+/* ============================================================
+   头像右边的文字块
+   为什么要多这一层:.introduction 是 flex 容器,只有「直接子元素」
+   会被排成一行。把 h3 和 p 包进这个 div,它们就变成孙元素,
+   回到普通块级流,自然上下排列。
+   ============================================================ */
+.intro-info{
+    flex: 1;                      /* 吃掉头像右边的剩余宽度 */
+    min-width: 0;                 /* 防止长句子把 flex 容器撑破 */
+}
+
+.intro-info h3{
+    margin: 0 0 0.4rem;           /* 只留和下方文字的一点间距 */
+    font-size: 1.15rem;
+    line-height: 1.3;
+}
+
+.intro-info p{
+    margin: 0;                    /* 段落默认外边距会撑得太开 */
+    line-height: 1.6;
+}
+
+
+/* ============================================================
+   手机端:头像和文字改成上下竖排
+   窄屏并排时文字块只剩 150px 左右,长句子要断三四行;
+   竖排后文字拿满整行宽度。
+   ============================================================ */
+@media (max-width: 768px) {
+    .introduction{
+        flex-direction: column;   /* 主轴由横改竖:头像在上,文字在下 */
+        align-items: flex-start;
+        gap: 0.8rem;
+    }
+    .intro-info{
+        flex: none;               /* 竖排后不需要「吃掉右侧剩余宽度」 */
+        width: 100%;
+    }
+}
