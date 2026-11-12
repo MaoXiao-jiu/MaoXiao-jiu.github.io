@@ -64,7 +64,7 @@
 
 
 /* ---------- 5. 手机上收紧一点留白 ---------- */
-@media (max-width: 768px) {
+@media (max-width: 920px) {
     .video-title { font-size: 1rem; }
     .question-list li { font-size: 0.9rem; }
 }

@@ -42,7 +42,7 @@
    窄屏并排时文字块只剩 150px 左右,长句子要断三四行;
    竖排后文字拿满整行宽度。
    ============================================================ */
-@media (max-width: 768px) {
+@media (max-width: 920px) {
     .introduction{
         flex-direction: column;   /* 主轴由横改竖:头像在上,文字在下 */
         align-items: flex-start;
