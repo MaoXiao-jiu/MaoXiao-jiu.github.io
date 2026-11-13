@@ -132,6 +132,48 @@ nav a:hover {
 }
 
 /* ============================================================
+   导航里的圆形图标按钮(现在的登录入口,以后可能还有别的)
+
+   为什么要写成 header a.login-icon 这么长 —— 特异性(specificity):
+       nav a                = (0,0,2)   桌面导航的文字链接
+       .phone-accordion a   = (0,1,1)   手机菜单的文字链接  ← 就是它
+       .login-icon          = (0,1,0)   光写类名压不住上面那条
+       header a.login-icon  = (0,1,2)   三位都压得住
+
+   规则:从右往左数其实是 (元素, class, id),逐位比较,
+   第 2 位相同时才看第 3 位。.phone-accordion a 比 .login-icon
+   多一个元素那一位,所以赢了 —— 圆角被改成 6px,就成方形了。
+
+   ::after 要单独关 —— nav a::after 是那条滑出的下划线,
+   它不会因为改了 display 就自己消失。
+   ============================================================ */
+header a.login-icon {
+    display: flex;                 /* 让 svg 在圆圈里居中 */
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    padding: 0;                    /* 覆盖 nav a 和 .phone-accordion a 的 padding */
+    border: 1.5px solid rgba(255, 255, 255, 0.55);
+    border-radius: 50%;            /* 50% = 圆 */
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+header a.login-icon:hover {
+    background-color: rgba(255, 255, 255, 0.15);   /* 悬浮时微微提亮,给出反馈 */
+    border-color: rgba(255, 255, 255, 0.9);
+    opacity: 1;                    /* 盖掉 nav a:hover 的 opacity: 0.7,不然圆圈会变淡 */
+}
+
+header a.login-icon::after {
+    content: none;                 /* 关掉导航的下划线动画 */
+}
+
+header a.login-icon svg {
+    display: block;                /* 去掉行内 svg 坐在基线上的几像素空隙 */
+}
+
+/* ============================================================
    5. 通用组件:卡片 —— 多个页面都可能用到
    ============================================================ */
 .card {
