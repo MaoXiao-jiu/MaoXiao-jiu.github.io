@@ -160,11 +160,11 @@ nav a:hover {
    ============================================================ */
 hr {
     border: none;                          /* 去掉默认的 3D 凹陷边框 */
-    height: 3px;
-    background-color: var(--main_color);
+    height: 1px;                           /* 细线:够分隔,不抢内容 */
+    background-color: rgba(255, 255, 255, 0.5);
     width: 100%;                           /* 先占满可用宽度 */
     max-width: 800px;                      /* 但不超过卡片宽度,保持对齐 */
-    margin: 1.1rem auto;                   /* 上下留白 + 水平居中 */
+    margin: 1rem auto 0.75rem;             /* 上下留白 + 水平居中 */
 }
 
 
@@ -470,6 +470,92 @@ nav a:hover::after {
     border-bottom: 2px solid rgba(255, 255, 255, 0.18);  
     
 }
+/* ============================================================
+   提示框组件(.hint / .hint-btn)
+   由 js/hint.js 的 showAlert() 动态创建,结构:
+     .hint > .card > h2 + hr + p.msg + button.hint-btn
+   JS 只负责建 DOM 和关闭逻辑,外观全部在这里。
+
+   为什么放在 base.css:它是跨页组件(首页、功劳页都要用),
+   不是某一页专属,所以和 .card 一样属于全站共用。
+   以前它写在 index.css 里,结果别的页面只引 JS 不引那个文件,
+   提示框就变成没样式的裸节点 —— 直接排到页脚后面去了。
+   ============================================================ */
+.hint {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.6);   /* 半透明黑:把背景压暗 */
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes expandX {
+    from { transform: scaleX(0); }
+    to   { transform: scaleX(1); }
+}
+
+/* 提示框里的按钮
+   注意:button 不会继承 body 的字体,必须写 font: inherit;
+        不写 type="button" 时默认是 submit,放在 form 里会提交表单 */
+.hint-btn {
+    font: inherit;                                       /* 继承思源黑体,否则会变成系统字体 */
+    cursor: pointer;                                     /* 手型光标 */
+
+    /* 重置浏览器默认的按钮样式 */
+    border: 0.1rem solid rgba(255, 255, 255, 0.5);      /* 半透明白描边 */
+    border-radius: 50px;
+    background-color: rgba(74, 201, 201, 0.8);           /* 半透明主色底 */
+    color: var(--main_font_color);
+
+    padding: 6px 15px;                                   /* 撑开点击区 */
+    transition: background-color 0.2s, border-color 0.2s; /* 悬浮渐变,别用 all */
+}
+
+.hint .card {
+    animation: expandX 0.2s ease-out;
+}
+
+.hint-btn:hover {
+    background-color: rgba(74, 201, 201, 1);             /* 悬浮时不透明 */
+    border-color: rgba(255, 255, 255, 0.9);              /* 描边更亮 */
+}
+
+/* 键盘用户按 Tab 聚焦时,给一个可见的焦点框(别去掉) */
+.hint-btn:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.9);
+    outline-offset: 2px;
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }    /* 开头:完全不透明 */
+    to   { opacity: 0; }    /* 结尾:完全透明 */
+}
+
+@keyframes collapseX {
+    from { transform: scaleX(1); }
+    to   { transform: scaleX(0); }
+}
+
+.hint.is-closing {
+    animation: fadeOut 0.15s ease-in forwards;
+}
+
+.hint.is-closing .card {
+    animation: collapseX 0.15s ease-in forwards;
+}
+
+
 /* ============================================================
    10. 响应式:屏幕宽度 ≤ 920px 时生效
       必须放在文件末尾 —— 同优先级时后写的规则才生效

@@ -4,6 +4,9 @@
 
    依赖:必须在 base.css 之后引入,
         因为这里用到了 base.css 里定义的 --main_color
+
+   提示框(.hint / .hint-btn)是跨页组件,已移到 base.css,
+   它由 js/hint.js 动态创建,不属于任何单一页面。
    ============================================================ */
 
 
@@ -15,73 +18,7 @@ h1 {
     font-size: 1.6rem;
 }
 
-.hint{
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: rgba(0, 0, 0, 0.6);
-    z-index: 999;
-    display: flex ;         
-    align-items: center;    
-    justify-content: center; 
-    animation: fadeIn 0.2s ease-out;
-}
 
-    @keyframes fadeIn {
-        from { opacity: 0; }
-        to   { opacity: 1;}
-    }
-    @keyframes expandX {
-    from { transform: scaleX(0); }
-    to   { transform: scaleX(1); }
-}
-
-
-/* ============================================================
-   1.5 提示框里的按钮
-   注意:button 不会继承 body 的字体,必须写 font: inherit;
-        不写 type="button" 时默认是 submit,放在 form 里会提交表单
-   ============================================================ */
-.hint-btn {
-    font: inherit;                                       /* 继承思源黑体,否则会变成系统字体 */
-    cursor: pointer;                                     /* 手型光标 */
-
-    /* 重置浏览器默认的按钮样式 */
-    border: 0.1rem solid rgba(255, 255, 255, 0.5);      /* 半透明白描边 */
-    border-radius: 50px;
-    background-color: rgba(74, 201, 201, 0.8);           /* 半透明主色底 */
-    color: var(--main_font_color);
-
-    padding: 6px 15px;                                   /* 撑开点击区 */
-    transition: background-color 0.2s, border-color 0.2s; /* 悬浮渐变,别用 all */
-}
-.hint .card { animation: expandX 0.2s ease-out; }
-.hint-btn:hover {
-    background-color: rgba(74, 201, 201, 1);             /* 悬浮时不透明 */
-    border-color: rgba(255, 255, 255, 0.9);              /* 描边更亮 */
-}
-
-/* 键盘用户按 Tab 聚焦时,给一个可见的焦点框(别去掉) */
-.hint-btn:focus-visible {
-    outline: 2px solid rgba(255, 255, 255, 0.9);
-    outline-offset: 2px;
-}
-@keyframes fadeOut {
-    from { opacity: 1; }    /* 开头:完全不透明 */
-    to   { opacity: 0; }    /* 结尾:完全透明 */
-}
-@keyframes collapseX {
-    from { transform: scaleX(1); }
-    to   { transform: scaleX(0); }
-}
-.hint.is-closing {
-    animation: fadeOut 0.15s ease-in forwards;
-}
-.hint.is-closing .card {
-    animation: collapseX 0.15s ease-in forwards;
-}
 /* ============================================================
    2. 首页社交链接行(小红书 / B站 / 原神面板)
    ============================================================ */
@@ -109,12 +46,18 @@ h1 {
     margin-left: 1.5rem;
     opacity: 0.4;               /* 竖线比文字淡,起分隔作用但不抢眼 */
 }
-h1 em { 
+
+
+/* ============================================================
+   3. 首页主标题上那个可点击的 <em>
+   点它会切换成当天日期,行为在 js/times.js 里
+   ============================================================ */
+h1 em {
     cursor: pointer;
     transition: 0.18s;
     opacity: 1;
 }
-h1 em:hover{
+
+h1 em:hover {
     opacity: 0.7;
 }
-
