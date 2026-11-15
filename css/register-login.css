@@ -1,0 +1,145 @@
+body{
+    margin: 0;
+    padding: 0;
+}
+.page-center{
+    flex: 1;
+    display: flex;
+
+}
+.page-center > .card{
+    margin: auto;
+}
+img{
+    width: 32px;
+    height: 32px;
+    object-fit: cover;            /* 按短边裁切填满,换竖图也不会变椭圆 */
+}
+.navigation-main{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0px;
+
+    /* 关键:不加这条,子项会被默认的 stretch 拉满整行高度,
+       按钮里设的 padding / 高度就全被覆盖掉了 */
+    align-items: center;
+}
+.left-group {
+    display: flex;
+    align-items: center; /* 让图片和文字在同一条水平线上 */
+    gap: 8px;            /* 图片和文字紧紧贴在一起，只留 8px 缝隙 */
+}
+.left-group p{
+    font-weight: 600;
+
+    /* <p> 默认带上下各 1em 外边距,会把整行撑到 56px。
+       归零后这一行的高度由 32px 的图片决定 */
+    margin: 0;
+}
+.back-btn {
+    text-decoration: none; /* 去掉下划线 */
+    color: var(--main_font_color);
+    border: 0.1rem solid rgba(255, 255, 255, 0.5);
+    border-radius: 50px;
+    transition: 0.3s;
+
+    display: flex;              /* 按钮自己当 flex 容器 */
+    align-items: center;        /* 文字垂直居中 */
+    justify-content: center;    /* 文字水平居中 */
+
+    /* 内边距写在按钮上,而不是里面的 span:
+       上下 4px 撑高度,左右 14px 撑宽度,一处就能推算整体尺寸 */
+    padding: 4px 14px;
+}
+.back-btn:hover{
+    border: 0.1rem solid rgba(255, 255, 255, 1);
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+
+/* ============================================================
+   注册表单
+   朴实版:标签在输入框上方,输入框只做外观重置,没有任何动画。
+   ============================================================ */
+.register-form{
+    text-align: left;       /* 卡片默认居中,表单内容要左对齐 */
+    margin-top: 1.2rem;
+}
+
+/* --- 每个字段的外层容器 --- */
+.field{
+    max-width: 340px;       /* 卡片有 800px 宽,输入框拉满会很夸张 */
+    margin-bottom: 16px;
+}
+
+/* --- 标签 --- */
+.register-form label{
+    display: block;         /* label 默认是行内元素,不换行会和输入框挤在一行 */
+    margin-bottom: 6px;
+    font-size: 0.9rem;
+    opacity: 0.85;
+}
+
+/* --- 输入框:去掉浏览器默认外观 ---
+   默认的 <input> 是「浅灰底 + 深灰内凹边框 + 系统字体」,
+   和这张半透明青色卡片完全不是一路。 */
+.register-form input{
+    appearance: none;       /* 去掉系统默认外观。iOS Safari 尤其顽固 */
+
+    width: 100%;
+    padding: 6px 14px;
+
+    /* 关键:input / button / select / textarea 都不会继承 body 的字体 */
+    font: inherit;
+    color: var(--main_font_color);
+
+    background-color: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 10px;
+
+    /* 聚焦时边框和底色渐变过去,而不是"啪"地跳变。
+       只动画这两个属性,别用 all —— all 会把将来加的属性也一起动画,容易出意外。 */
+    transition: border-color 0.2s, background-color 0.2s;
+}
+
+.register-form input::placeholder{
+    color: rgba(255, 255, 255, 0.45);   /* 占位文字要比正文淡 */
+}
+
+/* 聚焦时:边框变亮 + 底色加深,代替浏览器默认那个 outline */
+.register-form input:focus{
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.9);
+    background-color: rgba(255, 255, 255, 0.18);
+}
+.change-account-a{
+    text-decoration: none; 
+    color: var(--main_font_color);          
+    transition: color 0.3s;
+}
+.change-account-a:hover{
+    color: rgba(255, 255, 255, 0.7);
+}
+.submit-btn{
+    font: inherit;                                      
+    cursor: pointer;                                    
+    border: 0.1rem solid rgba(255, 255, 255, 0.5);      
+    background-color: transparent;
+    border-radius: 50px;
+    color: var(--main_font_color);
+    padding: 5px 15px;                                   
+    transition: 0.2s; 
+}
+.submit-btn:hover{
+    border: 0.1rem solid rgba(255, 255, 255, 1);
+    background-color: rgba(255, 255, 255, 0.1);
+}
+.text-group{
+    margin: 6px 0 14px;
+    padding-left: 1.2em;      /* 给序号腾位置 */
+    font-size: 0.85rem;
+    line-height: 1.5;
+}
+.text-group li{
+    margin-bottom: 2px;
+}
